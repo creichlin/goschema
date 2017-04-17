@@ -3,7 +3,9 @@ package goschema
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/creichlin/gutil"
+	"github.com/creichlin/gutil/format"
 	"github.com/xeipuuv/gojsonschema"
 )
 
@@ -26,6 +28,10 @@ func NewGOSchema(description string) GOSchema {
 func (g *goSchema) Properties(pf func(Properties)) GOSchema {
 	pf(g.properties)
 	return g
+}
+
+func (g *goSchema) DocString() string {
+	return format.Align(fmt.Sprintf("%s\nProperties:\n", g.description)+g.properties.docString("  "), "//")
 }
 
 func (g *goSchema) AsJSONSchema() (string, error) {
@@ -74,7 +80,7 @@ func (g *goSchema) write(data map[string]interface{}) {
 	required := []string{}
 
 	for name, value := range g.properties.props {
-		props[name] = value.write()
+		props[name] = value.writeJSONSchema()
 		if value.isRequired() {
 			required = append(required, name)
 		}

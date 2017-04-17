@@ -17,18 +17,17 @@ Its implemented in a fluent interface style:
 	// it can also be loaded from a json file with json.Unmarshal(data, mapPointer)
 	personValidator.Validate(person)
 	
-Todo
-----
-
-Creating plain text output and also markdown output
-with documentation of the validation format in the sense of:
+Creating plain text output with documentation of the validation format
+in the sense of:
 
     Example person schema
     Properties
       firstName // Given name as string
       lastName  // optional Second name and additional names if available as string
       age       // optional Age in years as int from 0 to 5
-      gender    // gender as string (male=A malespeciemen, femal=Afemale speciemen)
+      gender    // gender as string
+        male    // A malespeciemen
+        female  // A female speciemen
        
-This data can be extracted from the defined valuies above including the help string which is usually
+This data can be extracted from the defined values above including the help string which is usually
 the second parameter in data-type definition calls

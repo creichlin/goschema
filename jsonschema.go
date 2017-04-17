@@ -1,6 +1,7 @@
 package goschema
 
 type jsWriter interface {
-	write() map[string]interface{}
+	writeJSONSchema() map[string]interface{}
+	docString(prefix, name string) string
 	isRequired() bool
 }

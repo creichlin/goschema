@@ -11,7 +11,22 @@ func (g *goStringProperty) Optional() StringProperty {
 	return g
 }
 
-func (g *goStringProperty) write() map[string]interface{} {
+func (g *goStringProperty) docString(prefix, name string) string {
+	doc := prefix + name + " // "
+	if g.optional {
+		doc += " optional, "
+	}
+
+	if g.description == "" {
+		doc += name + " "
+	} else {
+		doc += g.description + " "
+	}
+
+	return doc + "as string\n"
+}
+
+func (g *goStringProperty) writeJSONSchema() map[string]interface{} {
 	data := map[string]interface{}{
 		"type": "string",
 	}

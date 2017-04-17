@@ -1,8 +1,26 @@
 package goschema
 
+import "sort"
+
 type goProperties struct {
 	parent *goSchema
 	props  map[string]jsWriter
+}
+
+func (g *goProperties) docString(prefix string) string {
+	result := ""
+
+	keys := []string{}
+	for key := range g.props {
+		keys = append(keys, key)
+	}
+
+	sort.Strings(keys)
+
+	for _, key := range keys {
+		result += g.props[key].docString(prefix, key)
+	}
+	return result
 }
 
 func (g *goProperties) Enum(name string, desc string) EnumProperty {

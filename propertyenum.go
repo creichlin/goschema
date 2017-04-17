@@ -12,6 +12,19 @@ type goEnumProperty struct {
 	optional    bool
 }
 
+func (g *goEnumProperty) docString(prefix, name string) string {
+	doc := prefix + name + " // "
+	if g.optional {
+		doc += "optional, "
+	}
+	doc += g.description + "\n"
+	for _, item := range g.items {
+		doc += prefix + "  " + item.key + " // " + item.description + "\n"
+	}
+
+	return doc
+}
+
 func (g *goEnumProperty) Add(key string, desc string) EnumProperty {
 	g.items = append(g.items, goEnumItem{
 		key:         key,
@@ -25,7 +38,7 @@ func (g *goEnumProperty) Optional() EnumProperty {
 	return g
 }
 
-func (g *goEnumProperty) write() map[string]interface{} {
+func (g *goEnumProperty) writeJSONSchema() map[string]interface{} {
 	data := map[string]interface{}{
 		"type": "string",
 	}

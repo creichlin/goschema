@@ -1,5 +1,7 @@
 package goschema
 
+import "fmt"
+
 type goIntProperty struct {
 	parent      *goProperties
 	description string
@@ -23,7 +25,31 @@ func (g *goIntProperty) Max(max int) IntProperty {
 	return g
 }
 
-func (g *goIntProperty) write() map[string]interface{} {
+func (g *goIntProperty) docString(prefix, name string) string {
+	doc := prefix + name + " // "
+	if g.optional {
+		doc += " optional, "
+	}
+
+	if g.description == "" {
+		doc += name + " "
+	} else {
+		doc += g.description + " "
+	}
+
+	doc += "as int "
+
+	if g.min != nil && g.max != nil {
+		doc += fmt.Sprintf("from %v to %v", *g.min, *g.max)
+	} else if g.min != nil {
+		doc += fmt.Sprintf("%v or more", *g.min)
+	} else if g.max != nil {
+		doc += fmt.Sprintf("%v or less", *g.max)
+	}
+	return doc + "\n"
+}
+
+func (g *goIntProperty) writeJSONSchema() map[string]interface{} {
 	data := map[string]interface{}{
 		"type": "integer",
 	}

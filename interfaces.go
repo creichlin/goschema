@@ -6,6 +6,7 @@ type GOSchema interface {
 	Properties(func(Properties)) GOSchema
 	AsJSONSchema() (string, error)
 	Validate(map[string]interface{}) *gutil.ErrorCollector
+	DocString() string
 }
 
 type Properties interface {

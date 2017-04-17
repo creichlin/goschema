@@ -131,6 +131,8 @@ var (
 )
 
 func TestBasicExample(t *testing.T) {
+	fmt.Printf("%v", person.DocString())
+
 	for _, testCase := range testCases {
 		testCase := testCase
 		t.Run(testCase.Name, func(t *testing.T) {

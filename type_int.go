@@ -2,30 +2,36 @@ package goschema
 
 import "fmt"
 
-type goIntProperty struct {
-	parent      *goProperties
-	description string
-	optional    bool
-	min         *int
-	max         *int
+type intType struct {
+	baseType
+	min *int
+	max *int
 }
 
-func (g *goIntProperty) Optional() IntProperty {
+func NewIntType(description string) IntType {
+	return &intType{
+		baseType: baseType{
+			description: description,
+		},
+	}
+}
+
+func (g *intType) Optional() IntType {
 	g.optional = true
 	return g
 }
 
-func (g *goIntProperty) Min(min int) IntProperty {
+func (g *intType) Min(min int) IntType {
 	g.min = &min
 	return g
 }
 
-func (g *goIntProperty) Max(max int) IntProperty {
+func (g *intType) Max(max int) IntType {
 	g.max = &max
 	return g
 }
 
-func (g *goIntProperty) docString(prefix, name string) string {
+func (g *intType) docString(prefix, name string) string {
 	doc := prefix + name + " // "
 	if g.optional {
 		doc += " optional, "
@@ -49,7 +55,7 @@ func (g *goIntProperty) docString(prefix, name string) string {
 	return doc + "\n"
 }
 
-func (g *goIntProperty) writeJSONSchema() map[string]interface{} {
+func (g *intType) asJSONSchema() map[string]interface{} {
 	data := map[string]interface{}{
 		"type": "integer",
 	}
@@ -63,8 +69,4 @@ func (g *goIntProperty) writeJSONSchema() map[string]interface{} {
 		data["maximum"] = g.max
 	}
 	return data
-}
-
-func (g *goIntProperty) isRequired() bool {
-	return !g.optional
 }

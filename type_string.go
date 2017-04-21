@@ -1,17 +1,23 @@
 package goschema
 
-type goStringProperty struct {
-	parent      *goProperties
-	description string
-	optional    bool
+type stringType struct {
+	baseType
 }
 
-func (g *goStringProperty) Optional() StringProperty {
+func NewStringType(description string) StringType {
+	return &stringType{
+		baseType: baseType{
+			description: description,
+		},
+	}
+}
+
+func (g *stringType) Optional() StringType {
 	g.optional = true
 	return g
 }
 
-func (g *goStringProperty) docString(prefix, name string) string {
+func (g *stringType) docString(prefix, name string) string {
 	doc := prefix + name + " // "
 	if g.optional {
 		doc += " optional, "
@@ -26,7 +32,7 @@ func (g *goStringProperty) docString(prefix, name string) string {
 	return doc + "as string\n"
 }
 
-func (g *goStringProperty) writeJSONSchema() map[string]interface{} {
+func (g *stringType) asJSONSchema() map[string]interface{} {
 	data := map[string]interface{}{
 		"type": "string",
 	}
@@ -34,8 +40,4 @@ func (g *goStringProperty) writeJSONSchema() map[string]interface{} {
 		data["description"] = g.description
 	}
 	return data
-}
-
-func (g *goStringProperty) isRequired() bool {
-	return !g.optional
 }

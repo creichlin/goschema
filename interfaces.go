@@ -1,31 +1,32 @@
 package goschema
 
-import "github.com/creichlin/gutil"
-
-type GOSchema interface {
-	Properties(func(Properties)) GOSchema
-	AsJSONSchema() (string, error)
-	Validate(map[string]interface{}) *gutil.ErrorCollector
-	DocString() string
+type Type interface {
+	asJSONSchema() map[string]interface{}
+	docString(prefix, name string) string
+	isRequired() bool
 }
 
-type Properties interface {
-	String(name string, desc string) StringProperty
-	Int(name string, desc string) IntProperty
-	Enum(name string, desc string) EnumProperty
+type ObjectType interface {
+	Type
+	String(name string, desc string) StringType
+	Int(name string, desc string) IntType
+	Enum(name string, desc string) EnumType
 }
 
-type StringProperty interface {
-	Optional() StringProperty
+type StringType interface {
+	Type
+	Optional() StringType
 }
 
-type EnumProperty interface {
-	Optional() EnumProperty
-	Add(key string, desc string) EnumProperty
+type EnumType interface {
+	Type
+	Optional() EnumType
+	Add(key string, desc string) EnumType
 }
 
-type IntProperty interface {
-	Min(min int) IntProperty
-	Max(min int) IntProperty
-	Optional() IntProperty
+type IntType interface {
+	Type
+	Min(min int) IntType
+	Max(min int) IntType
+	Optional() IntType
 }

@@ -1,18 +1,24 @@
 package goschema
 
-type goEnumItem struct {
+type enumItem struct {
 	key         string
 	description string
 }
 
-type goEnumProperty struct {
-	parent      *goProperties
-	description string
-	items       []goEnumItem
-	optional    bool
+type enumType struct {
+	baseType
+	items []enumItem
 }
 
-func (g *goEnumProperty) docString(prefix, name string) string {
+func NewEnumType(description string) EnumType {
+	return &enumType{
+		baseType: baseType{
+			description: description,
+		},
+	}
+}
+
+func (g *enumType) docString(prefix, name string) string {
 	doc := prefix + name + " // "
 	if g.optional {
 		doc += "optional, "
@@ -25,20 +31,20 @@ func (g *goEnumProperty) docString(prefix, name string) string {
 	return doc
 }
 
-func (g *goEnumProperty) Add(key string, desc string) EnumProperty {
-	g.items = append(g.items, goEnumItem{
+func (g *enumType) Add(key string, desc string) EnumType {
+	g.items = append(g.items, enumItem{
 		key:         key,
 		description: desc,
 	})
 	return g
 }
 
-func (g *goEnumProperty) Optional() EnumProperty {
+func (g *enumType) Optional() EnumType {
 	g.optional = true
 	return g
 }
 
-func (g *goEnumProperty) writeJSONSchema() map[string]interface{} {
+func (g *enumType) asJSONSchema() map[string]interface{} {
 	data := map[string]interface{}{
 		"type": "string",
 	}
@@ -51,8 +57,4 @@ func (g *goEnumProperty) writeJSONSchema() map[string]interface{} {
 		data["description"] = g.description
 	}
 	return data
-}
-
-func (g *goEnumProperty) isRequired() bool {
-	return !g.optional
 }

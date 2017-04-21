@@ -91,3 +91,9 @@ func (g *objectType) String(name string, desc string) StringType {
 	g.props[name] = prop
 	return prop
 }
+
+func (g *objectType) Object(name string, desc string, ops func(ObjectType)) ObjectType {
+	prop := NewObjectType(desc, ops)
+	g.props[name] = prop
+	return prop
+}

@@ -11,6 +11,7 @@ type ObjectType interface {
 	String(name string, desc string) StringType
 	Int(name string, desc string) IntType
 	Enum(name string, desc string) EnumType
+	Object(name string, desc string, ops func(ObjectType)) ObjectType
 }
 
 type StringType interface {

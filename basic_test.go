@@ -3,6 +3,7 @@ package goschema_test
 import (
 	"fmt"
 	"github.com/creichlin/goschema"
+	"github.com/creichlin/gutil"
 	"reflect"
 	"sort"
 	"testing"
@@ -39,6 +40,13 @@ var (
 	enums = goschema.NewObjectType("Example enum schema", func(p goschema.ObjectType) {
 		p.Enum("foo", "").Add("A", "").Add("B", "")
 		p.Enum("bar", "").Add("X", "").Add("Y", "").Optional()
+	})
+
+	nested = goschema.NewObjectType("Nested object example", func(p goschema.ObjectType) {
+		p.Object("nested", "Nested object", func(p goschema.ObjectType) {
+			p.String("foo", "Foo")
+			p.String("bar", "Bar")
+		})
 	})
 
 	testCases = []testCase{
@@ -123,6 +131,25 @@ var (
 				"foo": "X",
 			},
 			[]string{`foo: foo must be one of the following: "A", "B"`},
+		}, {
+			"nested object",
+			nested,
+			map[string]interface{}{
+				"nested": map[string]interface{}{
+					"foo": "foo-value",
+					"bar": "bar-value",
+				},
+			},
+			[]string{},
+		}, {
+			"nested object with error",
+			nested,
+			map[string]interface{}{
+				"nested": map[string]interface{}{
+					"foo": "foo-value",
+				},
+			},
+			[]string{"bar: bar is required"},
 		},
 	}
 )
@@ -140,10 +167,10 @@ func TestBasicExample(t *testing.T) {
 			sort.Strings(errsList)
 			if !reflect.DeepEqual(errsList, testCase.Errors) {
 				t.Errorf("Errors don't match:\nexpected: %v\nactual: %v", testCase.Errors, errsList)
+				gutil.PrintAsYAML(goschema.AsJSONSchemaTree(testCase.Schema))
 			}
-			//js := testCase.Schema.asJSONSchema()
-			//jsStr, _ := json.Marshal(js)
-			//mustValidateJSONSchema(t, string(jsStr))
+			js, _ := goschema.AsJSONSchema(testCase.Schema)
+			mustValidateJSONSchema(t, string(js))
 		})
 	}
 }

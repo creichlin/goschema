@@ -1,6 +1,7 @@
 package goschema
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/creichlin/gutil"
 	"github.com/creichlin/gutil/format"
@@ -31,4 +32,16 @@ func ValidateGO(t Type, document interface{}) *gutil.ErrorCollector {
 func Doc(t Type) string {
 	docstr := t.docString("", "")
 	return format.Align(docstr, "//")
+}
+
+func AsJSONSchema(t Type) (string, error) {
+	json, err := json.Marshal(t.asJSONSchema())
+	if err != nil {
+		return "", err
+	}
+	return string(json), nil
+}
+
+func AsJSONSchemaTree(t Type) interface{} {
+	return t.asJSONSchema()
 }

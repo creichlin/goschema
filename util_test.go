@@ -1,4 +1,4 @@
-package goschema
+package goschema_test
 
 import (
 	"github.com/xeipuuv/gojsonschema"

@@ -14,6 +14,14 @@ type ObjectType interface {
 	Object(name string, desc string, ops func(ObjectType)) ObjectType
 }
 
+type MapType interface {
+	Type
+	String(desc string) StringType
+	Int(desc string) IntType
+	Enum(desc string) EnumType
+	Object(desc string, ops func(ObjectType)) ObjectType
+}
+
 type StringType interface {
 	Type
 	Optional() StringType

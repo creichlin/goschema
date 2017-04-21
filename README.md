@@ -19,6 +19,39 @@ It's implemented in a fluent interface style:
 	// it can also be loaded from a json file with json.Unmarshal(data, mapPointer)
 	goschema.Validate(personSchema, person)
 
+The validation is executed by generating a jsonschema, which is then validated against the
+datastructure:
+ 
+    {
+      "additionalProperties":false,
+      "properties":{
+        "age":{
+          "description":"Age in years",
+          "maximum":5,
+          "minimum":0,
+          "type":"integer"
+        },
+        "firstName":{
+          "type":"string"
+        },
+        "gender":{
+          "enum":[
+            "male",
+            "female"
+          ],
+          "type":"string"
+        },
+        "lastName":{
+          "type":"string"
+        }
+      },
+      "required":[
+        "firstName",
+        "gender"
+      ],
+      "title":"Example Schema",
+      "type":"object"
+    }
 
 doc generation
 --------------

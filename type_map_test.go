@@ -28,7 +28,7 @@ func TestMap(t *testing.T) {
 	}
 	if !reflect.DeepEqual(goschema.ValidateGO(ints, stringMap).StringList(),
 		[]string{"(root): Invalid type. Expected: integer, given: string", "(root): Invalid type. Expected: integer, given: string"}) {
-		t.Errorf("map with strings should be valid")
+		t.Errorf("map with strings should not be valid")
 		t.Log(goschema.ValidateGO(ints, stringMap).StringList())
 		gutil.PrintAsYAML(goschema.AsJSONSchemaTree(ints))
 	}

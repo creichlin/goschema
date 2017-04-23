@@ -74,6 +74,11 @@ func (g *objectType) docString(prefix string, name string) string {
 	return result
 }
 
+func (g *objectType) Optional() ObjectType {
+	g.optional = true
+	return g
+}
+
 func (g *objectType) Enum(name string, desc string) EnumType {
 	t := NewEnumType(desc)
 	g.props[name] = t
@@ -94,6 +99,18 @@ func (g *objectType) String(name string, desc string) StringType {
 
 func (g *objectType) Object(name string, desc string, ops func(ObjectType)) ObjectType {
 	prop := NewObjectType(desc, ops)
+	g.props[name] = prop
+	return prop
+}
+
+func (g *objectType) Map(name string, desc string, ops func(MapType)) MapType {
+	prop := NewMapType(desc, ops)
+	g.props[name] = prop
+	return prop
+}
+
+func (g *objectType) List(name string, desc string, ops func(ListType)) ListType {
+	prop := NewListType(desc, ops)
 	g.props[name] = prop
 	return prop
 }

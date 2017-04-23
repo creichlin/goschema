@@ -8,13 +8,25 @@ type Type interface {
 
 type ObjectType interface {
 	Type
+	Optional() ObjectType
 	String(name string, desc string) StringType
 	Int(name string, desc string) IntType
 	Enum(name string, desc string) EnumType
 	Object(name string, desc string, ops func(ObjectType)) ObjectType
+	Map(name string, desc string, ops func(MapType)) MapType
+	List(name string, desc string, ops func(ListType)) ListType
 }
 
 type MapType interface {
+	Type
+	Optional() MapType
+	String(desc string) StringType
+	Int(desc string) IntType
+	Enum(desc string) EnumType
+	Object(desc string, ops func(ObjectType)) ObjectType
+}
+
+type ListType interface {
 	Type
 	String(desc string) StringType
 	Int(desc string) IntType

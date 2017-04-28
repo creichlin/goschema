@@ -170,7 +170,7 @@ func TestBasicExample(t *testing.T) {
 				gutil.PrintAsYAML(goschema.AsJSONSchemaTree(testCase.Schema))
 			}
 			js, _ := goschema.AsJSONSchema(testCase.Schema)
-			mustValidateJSONSchema(t, string(js))
+			goschema.MustValidateJSONSchema(t, string(js))
 		})
 	}
 }

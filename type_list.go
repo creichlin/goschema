@@ -36,7 +36,6 @@ func (g *listType) docString(prefix string, name string) string {
 	result := prefix
 	if name != "" { // we are not on root level
 		result += name + " // " + g.description + "\n"
-		prefix += "  "
 	} else {
 		result += g.description + "\n"
 		result += strings.Repeat("-", len(g.description)) + "\n"

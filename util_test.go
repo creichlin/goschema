@@ -1,4 +1,4 @@
-package goschema_test
+package goschema
 
 import (
 	"github.com/xeipuuv/gojsonschema"
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func mustValidateJSONSchema(t *testing.T, json string) {
+func MustValidateJSONSchema(t *testing.T, json string) {
 	errs := validateJSONSchema(t, json)
 	if len(errs) != 0 {
 		t.Errorf("invalid json schema %v", errs)

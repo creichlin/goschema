@@ -6,8 +6,7 @@ import (
 
 type mapType struct {
 	baseType
-	subtype  Type
-	optional bool
+	subtype Type
 }
 
 func NewMapType(description string, subType func(m MapType)) MapType {

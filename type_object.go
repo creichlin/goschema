@@ -7,8 +7,7 @@ import (
 
 type objectType struct {
 	baseType
-	props    map[string]Type
-	optional bool
+	props map[string]Type
 }
 
 func NewObjectType(description string, each func(ObjectType)) ObjectType {

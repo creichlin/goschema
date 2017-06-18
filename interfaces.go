@@ -28,6 +28,7 @@ type MapType interface {
 
 type ListType interface {
 	Type
+	Optional() ListType
 	String(desc string) StringType
 	Int(desc string) IntType
 	Enum(desc string) EnumType

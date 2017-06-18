@@ -6,8 +6,7 @@ import (
 
 type listType struct {
 	baseType
-	subtype  Type
-	optional bool
+	subtype Type
 }
 
 func NewListType(description string, subType func(m ListType)) ListType {
@@ -48,6 +47,11 @@ func (g *listType) Enum(desc string) EnumType {
 	t := NewEnumType(desc)
 	g.subtype = t
 	return t
+}
+
+func (g *listType) Optional() ListType {
+	g.optional = true
+	return g
 }
 
 func (g *listType) Int(desc string) IntType {

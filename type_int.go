@@ -31,28 +31,16 @@ func (g *intType) Max(max int) IntType {
 	return g
 }
 
-func (g *intType) docString(prefix, name string) string {
-	doc := prefix + name + " // "
-	if g.optional {
-		doc += " optional, "
-	}
-
-	if g.description == "" {
-		doc += name + " "
-	} else {
-		doc += g.description + " "
-	}
-
-	doc += "as int "
-
+func (g *intType) docString(prefix, name string, docPrefix string) string {
+	rnge := ""
 	if g.min != nil && g.max != nil {
-		doc += fmt.Sprintf("from %v to %v", *g.min, *g.max)
+		rnge += fmt.Sprintf("from %v to %v", *g.min, *g.max)
 	} else if g.min != nil {
-		doc += fmt.Sprintf("%v or more", *g.min)
+		rnge += fmt.Sprintf("%v or more", *g.min)
 	} else if g.max != nil {
-		doc += fmt.Sprintf("%v or less", *g.max)
+		rnge += fmt.Sprintf("%v or less", *g.max)
 	}
-	return doc + "\n"
+	return docString(prefix, name, docPrefix, optionalMap[g.optional], g.description, "as int", rnge)
 }
 
 func (g *intType) asJSONSchema() map[string]interface{} {

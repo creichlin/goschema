@@ -1,19 +1,13 @@
 package goschema
 
-import (
-	"strings"
-)
-
 type listType struct {
 	baseType
 	subtype Type
 }
 
-func NewListType(description string, subType func(m ListType)) ListType {
+func NewListType(subType func(m ListType)) ListType {
 	gol := &listType{
-		baseType: baseType{
-			description: description,
-		},
+		baseType: baseType{},
 	}
 	subType(gol)
 	return gol
@@ -31,16 +25,8 @@ func (g *listType) asJSONSchema() map[string]interface{} {
 	return data
 }
 
-func (g *listType) docString(prefix string, name string) string {
-	result := prefix
-	if name != "" { // we are not on root level
-		result += name + " // " + g.description + "\n"
-	} else {
-		result += g.description + "\n"
-		result += strings.Repeat("-", len(g.description)) + "\n"
-	}
-
-	return result
+func (g *listType) docString(prefix string, name string, docPrefix string) string {
+	return g.subtype.docString(prefix, name+"[]", "List of")
 }
 
 func (g *listType) Enum(desc string) EnumType {

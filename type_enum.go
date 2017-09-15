@@ -18,16 +18,12 @@ func NewEnumType(description string) EnumType {
 	}
 }
 
-func (g *enumType) docString(prefix, name string) string {
-	doc := prefix + name + " // "
-	if g.optional {
-		doc += "optional, "
-	}
-	doc += g.description + "\n"
+func (g *enumType) docString(prefix, name string, docPrefix string) string {
+	doc := docString(prefix, name, docPrefix, optionalMap[g.optional], g.description)
+
 	for _, item := range g.items {
 		doc += prefix + "  " + item.key + " // " + item.description + "\n"
 	}
-
 	return doc
 }
 

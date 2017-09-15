@@ -3,6 +3,8 @@ package goschema
 import (
 	"encoding/json"
 	"errors"
+	"strings"
+
 	"github.com/creichlin/gutil"
 	"github.com/creichlin/gutil/format"
 	"github.com/xeipuuv/gojsonschema"
@@ -30,7 +32,7 @@ func ValidateGO(t Type, document interface{}) *gutil.ErrorCollector {
 }
 
 func Doc(t Type) string {
-	docstr := t.docString("", "")
+	docstr := t.docString("", "", "")
 	return format.Align(docstr, "//")
 }
 
@@ -45,3 +47,15 @@ func AsJSONSchema(t Type) (string, error) {
 func AsJSONSchemaTree(t Type) interface{} {
 	return t.asJSONSchema()
 }
+
+func docString(prefix, name string, doc ...string) string {
+	parts := []string{}
+	for _, d := range doc {
+		if d != "" {
+			parts = append(parts, d)
+		}
+	}
+	return prefix + name + " // " + strings.Join(parts, " ") + "\n"
+}
+
+var optionalMap = map[bool]string{true: "optional,", false: ""}

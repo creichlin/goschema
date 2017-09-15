@@ -1,14 +1,15 @@
 package goschema_test
 
 import (
-	"github.com/creichlin/goschema"
-	"github.com/creichlin/gutil"
 	"reflect"
 	"testing"
+
+	"github.com/creichlin/goschema"
+	"github.com/creichlin/gutil"
 )
 
 func TestList(t *testing.T) {
-	ints := goschema.NewListType("A List with int values", func(m goschema.ListType) {
+	ints := goschema.NewListType(func(m goschema.ListType) {
 		m.Int("Int values")
 	})
 

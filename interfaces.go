@@ -2,7 +2,7 @@ package goschema
 
 type Type interface {
 	asJSONSchema() map[string]interface{}
-	docString(prefix, name string) string
+	docString(prefix, name string, descPrefix string) string
 	isRequired() bool
 }
 
@@ -14,7 +14,7 @@ type ObjectType interface {
 	Enum(name string, desc string) EnumType
 	Object(name string, desc string, ops func(ObjectType)) ObjectType
 	Map(name string, desc string, ops func(MapType)) MapType
-	List(name string, desc string, ops func(ListType)) ListType
+	List(name string, ops func(ListType)) ListType
 }
 
 type MapType interface {

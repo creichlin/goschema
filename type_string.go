@@ -17,19 +17,8 @@ func (g *stringType) Optional() StringType {
 	return g
 }
 
-func (g *stringType) docString(prefix, name string) string {
-	doc := prefix + name + " // "
-	if g.optional {
-		doc += " optional, "
-	}
-
-	if g.description == "" {
-		doc += name + " "
-	} else {
-		doc += g.description + " "
-	}
-
-	return doc + "as string\n"
+func (g *stringType) docString(prefix, name string, docPrefix string) string {
+	return docString(prefix, name, docPrefix, optionalMap[g.optional], g.description, "as string")
 }
 
 func (g *stringType) asJSONSchema() map[string]interface{} {

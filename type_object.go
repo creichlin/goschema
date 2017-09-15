@@ -50,10 +50,10 @@ func (g *objectType) addProperties(data map[string]interface{}) {
 	}
 }
 
-func (g *objectType) docString(prefix string, name string) string {
-	result := prefix
+func (g *objectType) docString(prefix string, name string, docPrefix string) string {
+	result := ""
 	if name != "" { // we are not on root level
-		result += name + " // " + g.description + "\n"
+		result += docString(prefix, name, docPrefix, g.description)
 		prefix += "  "
 	} else {
 		result += g.description + "\n"
@@ -68,7 +68,7 @@ func (g *objectType) docString(prefix string, name string) string {
 	sort.Strings(keys)
 
 	for _, key := range keys {
-		result += g.props[key].docString(prefix, key)
+		result += g.props[key].docString(prefix, key, "")
 	}
 	return result
 }
@@ -108,8 +108,8 @@ func (g *objectType) Map(name string, desc string, ops func(MapType)) MapType {
 	return prop
 }
 
-func (g *objectType) List(name string, desc string, ops func(ListType)) ListType {
-	prop := NewListType(desc, ops)
+func (g *objectType) List(name string, ops func(ListType)) ListType {
+	prop := NewListType(ops)
 	g.props[name] = prop
 	return prop
 }

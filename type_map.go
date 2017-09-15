@@ -33,16 +33,14 @@ func (g *mapType) asJSONSchema() map[string]interface{} {
 	return data
 }
 
-func (g *mapType) docString(prefix string, name string) string {
-	result := prefix
+func (g *mapType) docString(prefix string, name string, docPrefix string) string {
 	if name != "" { // we are not on root level
-		result += name + " // " + g.description + "\n"
+		return docString(prefix, name, docPrefix, g.description)
 	} else {
-		result += g.description + "\n"
+		result := g.description + "\n"
 		result += strings.Repeat("-", len(g.description)) + "\n"
+		return result
 	}
-
-	return result
 }
 
 func (g *mapType) Optional() MapType {

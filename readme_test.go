@@ -23,6 +23,12 @@ func TestReadmeExample(t *testing.T) {
 				p.String("lastName", "").Optional()
 			})
 		})
+		p.Map("results", "a map of ints or bools", func(g goschema.MapType) {
+			g.SomeOf("bla", func(g goschema.SomeOf) {
+				g.String("prosa")
+				g.Bool("technical")
+			})
+		})
 	})
 	fmt.Println(goschema.Doc(person))
 	fmt.Println()

@@ -35,7 +35,7 @@ func (g *mapType) asJSONSchema() map[string]interface{} {
 
 func (g *mapType) docString(prefix string, name string, docPrefix string) string {
 	if name != "" { // we are not on root level
-		return docString(prefix, name, docPrefix, g.description)
+		return docString(prefix, name, docPrefix, g.description) + g.subtype.docString(prefix+"  ", "  ", "")
 	} else {
 		result := g.description + "\n"
 		result += strings.Repeat("-", len(g.description)) + "\n"
@@ -74,6 +74,12 @@ func (g *mapType) String(desc string) StringType {
 
 func (g *mapType) Object(desc string, ops func(ObjectType)) ObjectType {
 	t := NewObjectType(desc, ops)
+	g.subtype = t
+	return t
+}
+
+func (g *mapType) SomeOf(desc string, ops func(SomeOf)) SomeOf {
+	t := NewSomeOf(desc, ops)
 	g.subtype = t
 	return t
 }

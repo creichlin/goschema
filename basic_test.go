@@ -2,11 +2,12 @@ package goschema_test
 
 import (
 	"fmt"
-	"github.com/creichlin/goschema"
-	"github.com/creichlin/gutil"
 	"reflect"
 	"sort"
 	"testing"
+
+	"github.com/creichlin/goschema"
+	"github.com/creichlin/gutil"
 )
 
 type testCase struct {
@@ -42,10 +43,23 @@ var (
 		p.Enum("bar", "").Add("X", "").Add("Y", "").Optional()
 	})
 
+	maps = goschema.NewObjectType("Example map schema", func(p goschema.ObjectType) {
+		p.Map("map1", "mdesc", func(g goschema.MapType) {
+			g.String("foooo")
+		})
+	})
+
 	nested = goschema.NewObjectType("Nested object example", func(p goschema.ObjectType) {
 		p.Object("nested", "Nested object", func(p goschema.ObjectType) {
 			p.String("foo", "Foo")
 			p.String("bar", "Bar")
+		})
+	})
+
+	some = goschema.NewMapType("Some example", func(p goschema.MapType) {
+		p.SomeOf("someof", func(p goschema.SomeOf) {
+			p.String("foo")
+			p.Bool("f")
 		})
 	})
 
@@ -150,6 +164,33 @@ var (
 				},
 			},
 			[]string{"bar: bar is required"},
+		}, {
+			"map with error",
+			maps,
+			map[string]interface{}{
+				"map1": map[string]interface{}{
+					"foo": 6,
+				},
+			},
+			[]string{"map1: Invalid type. Expected: string, given: integer"},
+		}, {
+			"some with string or bool",
+			some,
+			map[string]interface{}{
+				"a1": "foo",
+				"a2": false,
+			},
+			[]string{},
+		}, {
+			"some with string or bool AND int",
+			some,
+			map[string]interface{}{
+				"a1": "foo",
+				"a2": false,
+				"a3": 5,
+			},
+			[]string{"(root): Invalid type. Expected: string, given: integer",
+				"(root): Must validate at least one schema (anyOf)"},
 		},
 	}
 )
@@ -166,7 +207,7 @@ func TestBasicExample(t *testing.T) {
 			errsList := errs.StringList()
 			sort.Strings(errsList)
 			if !reflect.DeepEqual(errsList, testCase.Errors) {
-				t.Errorf("Errors don't match:\nexpected: %v\nactual: %v", testCase.Errors, errsList)
+				t.Errorf("Errors don't match:\nexpected: '%v'\nactual: '%v'", testCase.Errors, errsList)
 				gutil.PrintAsYAML(goschema.AsJSONSchemaTree(testCase.Schema))
 			}
 			js, _ := goschema.AsJSONSchema(testCase.Schema)

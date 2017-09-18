@@ -24,6 +24,7 @@ type MapType interface {
 	String(desc string) StringType
 	Int(desc string) IntType
 	Bool(desc string) BoolType
+	SomeOf(desc string, ops func(SomeOf)) SomeOf
 	Enum(desc string) EnumType
 	Object(desc string, ops func(ObjectType)) ObjectType
 }
@@ -59,4 +60,10 @@ type IntType interface {
 type BoolType interface {
 	Type
 	Optional() BoolType
+}
+
+type SomeOf interface {
+	Type
+	String(desc string) StringType
+	Bool(desc string) BoolType
 }

@@ -60,6 +60,12 @@ func (g *mapType) Int(desc string) IntType {
 	return t
 }
 
+func (g *mapType) Bool(desc string) BoolType {
+	t := NewBoolType(desc)
+	g.subtype = t
+	return t
+}
+
 func (g *mapType) String(desc string) StringType {
 	t := NewStringType(desc)
 	g.subtype = t

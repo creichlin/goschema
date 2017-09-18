@@ -90,6 +90,12 @@ func (g *objectType) Int(name string, desc string) IntType {
 	return prop
 }
 
+func (g *objectType) Bool(name string, desc string) BoolType {
+	prop := NewBoolType(desc)
+	g.props[name] = prop
+	return prop
+}
+
 func (g *objectType) String(name string, desc string) StringType {
 	prop := NewStringType(desc)
 	g.props[name] = prop

@@ -11,6 +11,7 @@ type ObjectType interface {
 	Optional() ObjectType
 	String(name string, desc string) StringType
 	Int(name string, desc string) IntType
+	Bool(name string, desc string) BoolType
 	Enum(name string, desc string) EnumType
 	Object(name string, desc string, ops func(ObjectType)) ObjectType
 	Map(name string, desc string, ops func(MapType)) MapType
@@ -22,6 +23,7 @@ type MapType interface {
 	Optional() MapType
 	String(desc string) StringType
 	Int(desc string) IntType
+	Bool(desc string) BoolType
 	Enum(desc string) EnumType
 	Object(desc string, ops func(ObjectType)) ObjectType
 }
@@ -31,6 +33,7 @@ type ListType interface {
 	Optional() ListType
 	String(desc string) StringType
 	Int(desc string) IntType
+	Bool(desc string) BoolType
 	Enum(desc string) EnumType
 	Object(desc string, ops func(ObjectType)) ObjectType
 }
@@ -51,4 +54,9 @@ type IntType interface {
 	Min(min int) IntType
 	Max(min int) IntType
 	Optional() IntType
+}
+
+type BoolType interface {
+	Type
+	Optional() BoolType
 }

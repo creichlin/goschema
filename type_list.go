@@ -46,6 +46,12 @@ func (g *listType) Int(desc string) IntType {
 	return t
 }
 
+func (g *listType) Bool(desc string) BoolType {
+	t := NewBoolType(desc)
+	g.subtype = t
+	return t
+}
+
 func (g *listType) String(desc string) StringType {
 	t := NewStringType(desc)
 	g.subtype = t

@@ -10,6 +10,13 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 )
 
+type baseType struct {
+	description string
+}
+
+// ValidateGO will validate the provided interface which can be a composite
+// of maps, slices and scalars, restricted to constructs that are allowed
+// in json (map keys must be strings, only float64, string, bool as scalars)
 func ValidateGO(t Type, document interface{}) *gutil.ErrorCollector {
 	errs := gutil.NewErrorCollector()
 	schema := t.asJSONSchema()
@@ -31,11 +38,14 @@ func ValidateGO(t Type, document interface{}) *gutil.ErrorCollector {
 	return errs
 }
 
+// Doc returns a string containing a very coarse documentation built from the
+// validator definition
 func Doc(t Type) string {
 	docstr := t.docString("", "", "")
 	return format.Align(docstr, "//")
 }
 
+// AsJSONSchema returns the validator as a json schema string
 func AsJSONSchema(t Type) (string, error) {
 	json, err := json.Marshal(t.asJSONSchema())
 	if err != nil {
@@ -44,7 +54,8 @@ func AsJSONSchema(t Type) (string, error) {
 	return string(json), nil
 }
 
-func AsJSONSchemaTree(t Type) interface{} {
+// AsGOJSONSchema returns the validator as a map, slice, scalar composite defining the json schema
+func AsGOJSONSchema(t Type) interface{} {
 	return t.asJSONSchema()
 }
 
@@ -57,5 +68,3 @@ func docString(prefix, name string, doc ...string) string {
 	}
 	return prefix + name + " // " + strings.Join(parts, " ") + "\n"
 }
-
-var optionalMap = map[bool]string{true: "optional,", false: ""}

@@ -59,7 +59,7 @@ var (
 	})
 
 	some = goschema.NewMapType("Some example", func(p goschema.MapType) {
-		p.SomeOf("someof", func(p goschema.SomeOf) {
+		p.SomeOf(func(p goschema.SomeOf) {
 			p.String("foo")
 			p.Bool("f")
 		})
@@ -69,7 +69,7 @@ var (
 		p.Attribute("any").Any("this can be just anything")
 	})
 
-	nullSchema = goschema.NewSomeOf("null or string", func(p goschema.SomeOf) {
+	nullSchema = goschema.NewSomeOf(func(p goschema.SomeOf) {
 		p.String("either a tring")
 		p.Null("or just null")
 	})
@@ -254,7 +254,7 @@ func TestBasicExample(t *testing.T) {
 			sort.Strings(errsList)
 			if !reflect.DeepEqual(errsList, testCase.Errors) {
 				t.Errorf("Errors don't match:\nexpected: '%v'\nactual: '%v'", testCase.Errors, errsList)
-				gutil.PrintAsYAML(goschema.AsJSONSchemaTree(testCase.Schema))
+				gutil.PrintAsYAML(goschema.AsGOJSONSchema(testCase.Schema))
 			}
 			js, _ := goschema.AsJSONSchema(testCase.Schema)
 			goschema.MustValidateJSONSchema(t, string(js))

@@ -16,11 +16,6 @@ func NewIntType(description string) IntType {
 	}
 }
 
-func (g *intType) Optional() IntType {
-	g.optional = true
-	return g
-}
-
 func (g *intType) Min(min int) IntType {
 	g.min = &min
 	return g
@@ -40,7 +35,7 @@ func (g *intType) docString(prefix, name string, docPrefix string) string {
 	} else if g.max != nil {
 		rnge += fmt.Sprintf("%v or less", *g.max)
 	}
-	return docString(prefix, name, docPrefix, optionalMap[g.optional], g.description, "as int", rnge)
+	return docString(prefix, name, docPrefix, g.description, "as int", rnge)
 }
 
 func (g *intType) asJSONSchema() map[string]interface{} {

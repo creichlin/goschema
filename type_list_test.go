@@ -20,7 +20,7 @@ func TestList(t *testing.T) {
 	if goschema.ValidateGO(ints, floatList).Has() {
 		t.Errorf("list with floats should be valid")
 		t.Log(goschema.ValidateGO(ints, floatList))
-		gutil.PrintAsYAML(goschema.AsJSONSchemaTree(ints))
+		gutil.PrintAsYAML(goschema.AsGOJSONSchema(ints))
 	}
 
 	stringList := []string{
@@ -31,6 +31,6 @@ func TestList(t *testing.T) {
 		[]string{"0: Invalid type. Expected: integer, given: string", "1: Invalid type. Expected: integer, given: string"}) {
 		t.Errorf("list with strings should not be valid")
 		t.Log(goschema.ValidateGO(ints, stringList).StringList())
-		gutil.PrintAsYAML(goschema.AsJSONSchemaTree(ints))
+		gutil.PrintAsYAML(goschema.AsGOJSONSchema(ints))
 	}
 }

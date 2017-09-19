@@ -1,9 +1,10 @@
 package goschema
 
 import (
-	"github.com/xeipuuv/gojsonschema"
 	"os"
 	"testing"
+
+	"github.com/xeipuuv/gojsonschema"
 )
 
 func MustValidateJSONSchema(t *testing.T, json string) {
@@ -29,11 +30,11 @@ func validateJSONSchema(t *testing.T, json string) []string {
 
 	if result.Valid() {
 		return []string{}
-	} else {
-		errs := []string{}
-		for _, desc := range result.Errors() {
-			errs = append(errs, desc.Description())
-		}
-		return errs
 	}
+
+	errs := []string{}
+	for _, desc := range result.Errors() {
+		errs = append(errs, desc.Description())
+	}
+	return errs
 }

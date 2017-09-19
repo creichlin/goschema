@@ -19,10 +19,10 @@ func NewEnumType(description string) EnumType {
 }
 
 func (g *enumType) docString(prefix, name string, docPrefix string) string {
-	doc := docString(prefix, name, docPrefix, optionalMap[g.optional], g.description)
+	doc := docString(prefix, name, docPrefix, g.description, "as string, it's one of:")
 
 	for _, item := range g.items {
-		doc += prefix + "  " + item.key + " // " + item.description + "\n"
+		doc += prefix + " // - " + item.key + ": " + item.description + "\n"
 	}
 	return doc
 }
@@ -32,11 +32,6 @@ func (g *enumType) Add(key string, desc string) EnumType {
 		key:         key,
 		description: desc,
 	})
-	return g
-}
-
-func (g *enumType) Optional() EnumType {
-	g.optional = true
 	return g
 }
 

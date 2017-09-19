@@ -12,13 +12,8 @@ func NewStringType(description string) StringType {
 	}
 }
 
-func (g *stringType) Optional() StringType {
-	g.optional = true
-	return g
-}
-
 func (g *stringType) docString(prefix, name string, docPrefix string) string {
-	return docString(prefix, name, docPrefix, optionalMap[g.optional], g.description, "as string")
+	return docString(prefix, name, docPrefix, g.description, "as string")
 }
 
 func (g *stringType) asJSONSchema() map[string]interface{} {

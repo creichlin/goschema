@@ -35,11 +35,6 @@ func (g *listType) Enum(desc string) EnumType {
 	return t
 }
 
-func (g *listType) Optional() ListType {
-	g.optional = true
-	return g
-}
-
 func (g *listType) Int(desc string) IntType {
 	t := NewIntType(desc)
 	g.subtype = t
@@ -76,8 +71,8 @@ func (g *listType) Any(desc string) AnyType {
 	return t
 }
 
-func (g *listType) SomeOf(desc string, ops func(SomeOf)) SomeOf {
-	t := NewSomeOf(desc, ops)
+func (g *listType) SomeOf(ops func(SomeOf)) SomeOf {
+	t := NewSomeOf(ops)
 	g.subtype = t
 	return t
 }

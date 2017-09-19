@@ -1,8 +1,9 @@
 package goschema_test
 
 import (
-	"github.com/creichlin/goschema"
 	"testing"
+
+	"github.com/creichlin/goschema"
 )
 
 func TestEnum(t *testing.T) {

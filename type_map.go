@@ -36,16 +36,10 @@ func (g *mapType) asJSONSchema() map[string]interface{} {
 func (g *mapType) docString(prefix string, name string, docPrefix string) string {
 	if name != "" { // we are not on root level
 		return docString(prefix, name, docPrefix, g.description) + g.subtype.docString(prefix+"  ", "  ", "")
-	} else {
-		result := g.description + "\n"
-		result += strings.Repeat("-", len(g.description)) + "\n"
-		return result
 	}
-}
-
-func (g *mapType) Optional() MapType {
-	g.optional = true
-	return g
+	result := g.description + "\n"
+	result += strings.Repeat("-", len(g.description)) + "\n"
+	return result
 }
 
 func (g *mapType) Enum(desc string) EnumType {
@@ -78,8 +72,8 @@ func (g *mapType) Object(desc string, ops func(ObjectType)) ObjectType {
 	return t
 }
 
-func (g *mapType) SomeOf(desc string, ops func(SomeOf)) SomeOf {
-	t := NewSomeOf(desc, ops)
+func (g *mapType) SomeOf(ops func(SomeOf)) SomeOf {
+	t := NewSomeOf(ops)
 	g.subtype = t
 	return t
 }

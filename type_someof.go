@@ -5,11 +5,9 @@ type someOf struct {
 	subtypes []Type
 }
 
-func NewSomeOf(description string, subTypes func(m SomeOf)) SomeOf {
+func NewSomeOf(subTypes func(m SomeOf)) SomeOf {
 	gom := &someOf{
-		baseType: baseType{
-			description: description,
-		},
+		baseType: baseType{},
 	}
 	subTypes(gom)
 	return gom
@@ -36,11 +34,6 @@ func (g *someOf) docString(prefix string, name string, docPrefix string) string 
 		dstr += st.docString(prefix+"  ", "- ", "")
 	}
 	return dstr
-}
-
-func (g *someOf) Optional() SomeOf {
-	g.optional = true
-	return g
 }
 
 func (g *someOf) Bool(desc string) BoolType {
@@ -73,8 +66,8 @@ func (g *someOf) Object(desc string, ops func(ObjectType)) ObjectType {
 	return t
 }
 
-func (g *someOf) SomeOf(desc string, ops func(SomeOf)) SomeOf {
-	t := NewSomeOf(desc, ops)
+func (g *someOf) SomeOf(ops func(SomeOf)) SomeOf {
+	t := NewSomeOf(ops)
 	g.subtypes = append(g.subtypes, t)
 	return t
 }

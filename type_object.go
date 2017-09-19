@@ -1,9 +1,6 @@
 package goschema
 
-import (
-	"sort"
-	"strings"
-)
+import "sort"
 
 type objectType struct {
 	baseType
@@ -59,13 +56,8 @@ func (g *objectType) addProperties(data map[string]interface{}) {
 
 func (g *objectType) docString(prefix string, name string, docPrefix string) string {
 	result := ""
-	if name != "" { // we are not on root level
-		result += docString(prefix, name, docPrefix, g.description)
-		prefix += "  "
-	} else {
-		result += g.description + "\n"
-		result += strings.Repeat("-", len(g.description)) + "\n"
-	}
+	result += docString(prefix, name, docPrefix, g.description)
+	prefix += "  "
 
 	keys := []string{}
 	for key := range g.props {
@@ -75,7 +67,11 @@ func (g *objectType) docString(prefix string, name string, docPrefix string) str
 	sort.Strings(keys)
 
 	for _, key := range keys {
-		result += g.props[key].docString(prefix, key, "")
+		opt := ""
+		if g.optional[key] {
+			opt = "optional,"
+		}
+		result += g.props[key].docString(prefix, key, opt)
 	}
 	return result
 }
@@ -149,8 +145,8 @@ func (g *objectAttribute) Null(description string) NullType {
 	return t
 }
 
-func (g *objectAttribute) SomeOf(desc string, ops func(SomeOf)) SomeOf {
-	t := NewSomeOf(desc, ops)
+func (g *objectAttribute) SomeOf(ops func(SomeOf)) SomeOf {
+	t := NewSomeOf(ops)
 	g.object.props[g.name] = t
 	return t
 }

@@ -12,13 +12,8 @@ func NewBoolType(description string) BoolType {
 	}
 }
 
-func (g *boolType) Optional() BoolType {
-	g.optional = true
-	return g
-}
-
 func (g *boolType) docString(prefix, name string, docPrefix string) string {
-	return docString(prefix, name, docPrefix, optionalMap[g.optional], g.description, "as bool")
+	return docString(prefix, name, docPrefix, g.description, "as bool")
 }
 
 func (g *boolType) asJSONSchema() map[string]interface{} {

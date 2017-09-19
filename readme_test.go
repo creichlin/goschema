@@ -13,7 +13,9 @@ func TestReadmeExample(t *testing.T) {
 		p.Optional("lastName").String("")
 		p.Optional("is-old").Bool("The person is considered old")
 		p.Optional("age").Int("Age in years").Min(0).Max(5)
-		p.Attribute("gender").Enum("").Add("male", "A male speciemen").Add("female", "A female speciemen")
+		p.Attribute("gender").Enum("describes the persons sex ").
+			Add("male", "A male speciemen").
+			Add("female", "A female speciemen")
 		p.Attribute("hobbies").List(func(p goschema.ListType) {
 			p.String("all my hobbies")
 		})
@@ -24,7 +26,7 @@ func TestReadmeExample(t *testing.T) {
 			})
 		})
 		p.Attribute("results").Map(func(g goschema.MapType) {
-			g.SomeOf("bla", func(g goschema.SomeOf) {
+			g.SomeOf(func(g goschema.SomeOf) {
 				g.String("prosa")
 				g.Bool("technical")
 			})

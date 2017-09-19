@@ -1,10 +1,11 @@
 package goschema_test
 
 import (
-	"github.com/creichlin/goschema"
-	"github.com/creichlin/gutil"
 	"reflect"
 	"testing"
+
+	"github.com/creichlin/goschema"
+	"github.com/creichlin/gutil"
 )
 
 func TestMap(t *testing.T) {
@@ -19,7 +20,7 @@ func TestMap(t *testing.T) {
 	if goschema.ValidateGO(ints, floatMap).Has() {
 		t.Errorf("map with floats should be valid")
 		t.Log(goschema.ValidateGO(ints, floatMap))
-		gutil.PrintAsYAML(goschema.AsJSONSchemaTree(ints))
+		gutil.PrintAsYAML(goschema.AsGOJSONSchema(ints))
 	}
 
 	stringMap := map[string]string{
@@ -27,9 +28,10 @@ func TestMap(t *testing.T) {
 		"7": "77",
 	}
 	if !reflect.DeepEqual(goschema.ValidateGO(ints, stringMap).StringList(),
-		[]string{"(root): Invalid type. Expected: integer, given: string", "(root): Invalid type. Expected: integer, given: string"}) {
+		[]string{"(root): Invalid type. Expected: integer, given: string",
+			"(root): Invalid type. Expected: integer, given: string"}) {
 		t.Errorf("map with strings should not be valid")
 		t.Log(goschema.ValidateGO(ints, stringMap).StringList())
-		gutil.PrintAsYAML(goschema.AsJSONSchemaTree(ints))
+		gutil.PrintAsYAML(goschema.AsGOJSONSchema(ints))
 	}
 }

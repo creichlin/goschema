@@ -16,6 +16,7 @@ type ObjectType interface {
 	Object(name string, desc string, ops func(ObjectType)) ObjectType
 	Map(name string, desc string, ops func(MapType)) MapType
 	List(name string, ops func(ListType)) ListType
+	Any(name string, desc string) AnyType
 }
 
 type MapType interface {
@@ -66,4 +67,8 @@ type SomeOf interface {
 	Type
 	String(desc string) StringType
 	Bool(desc string) BoolType
+}
+
+type AnyType interface {
+	Type
 }

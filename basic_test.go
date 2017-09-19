@@ -63,6 +63,10 @@ var (
 		})
 	})
 
+	any = goschema.NewObjectType("Some example", func(p goschema.ObjectType) {
+		p.Any("any", "this can be just anything")
+	})
+
 	testCases = []testCase{
 		{
 			"Minimal valid person",
@@ -191,6 +195,25 @@ var (
 			},
 			[]string{"(root): Invalid type. Expected: string, given: integer",
 				"(root): Must validate at least one schema (anyOf)"},
+		}, {
+			"any as string",
+			any,
+			map[string]interface{}{
+				"any": "foo",
+			},
+			[]string{},
+		}, {
+			"any as list",
+			any,
+			map[string]interface{}{
+				"any": []string{"a", "b"},
+			},
+			[]string{},
+		}, {
+			"no any at all",
+			any,
+			map[string]interface{}{},
+			[]string{"any: any is required"},
 		},
 	}
 )

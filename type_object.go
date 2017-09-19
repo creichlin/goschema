@@ -119,3 +119,9 @@ func (g *objectType) List(name string, ops func(ListType)) ListType {
 	g.props[name] = prop
 	return prop
 }
+
+func (g *objectType) Any(name string, description string) AnyType {
+	prop := NewAnyType(description)
+	g.props[name] = prop
+	return prop
+}

@@ -68,6 +68,7 @@ type SomeOf interface {
 	String(desc string) StringType
 	Bool(desc string) BoolType
 	Null(desc string) NullType
+	Object(desc string, ops func(ObjectType)) ObjectType
 }
 
 type AnyType interface {

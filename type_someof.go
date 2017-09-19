@@ -60,3 +60,9 @@ func (g *someOf) Null(desc string) NullType {
 	g.subtypes = append(g.subtypes, t)
 	return t
 }
+
+func (g *someOf) Object(desc string, ops func(ObjectType)) ObjectType {
+	t := NewObjectType(desc, ops)
+	g.subtypes = append(g.subtypes, t)
+	return t
+}

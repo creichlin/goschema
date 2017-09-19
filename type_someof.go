@@ -61,8 +61,44 @@ func (g *someOf) Null(desc string) NullType {
 	return t
 }
 
+func (g *someOf) Any(desc string) AnyType {
+	t := NewAnyType(desc)
+	g.subtypes = append(g.subtypes, t)
+	return t
+}
+
 func (g *someOf) Object(desc string, ops func(ObjectType)) ObjectType {
 	t := NewObjectType(desc, ops)
+	g.subtypes = append(g.subtypes, t)
+	return t
+}
+
+func (g *someOf) SomeOf(desc string, ops func(SomeOf)) SomeOf {
+	t := NewSomeOf(desc, ops)
+	g.subtypes = append(g.subtypes, t)
+	return t
+}
+
+func (g *someOf) Enum(desc string) EnumType {
+	t := NewEnumType(desc)
+	g.subtypes = append(g.subtypes, t)
+	return t
+}
+
+func (g *someOf) Int(desc string) IntType {
+	t := NewIntType(desc)
+	g.subtypes = append(g.subtypes, t)
+	return t
+}
+
+func (g *someOf) List(ops func(ListType)) ListType {
+	t := NewListType(ops)
+	g.subtypes = append(g.subtypes, t)
+	return t
+}
+
+func (g *someOf) Map(ops func(MapType)) MapType {
+	t := NewMapType("", ops)
 	g.subtypes = append(g.subtypes, t)
 	return t
 }

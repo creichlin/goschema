@@ -19,40 +19,42 @@ type testCase struct {
 
 var (
 	person = goschema.NewObjectType("Example Schema", func(p goschema.ObjectType) {
-		p.String("firstName", "")
-		p.String("lastName", "").Optional()
-		p.Int("age", "Age in years").Min(0).Max(5).Optional()
-		p.Enum("gender", "").Add("male", "A male speciemen").Add("female", "A female speciemen")
+		p.Attribute("firstName").String("")
+		p.Optional("lastName").String("")
+		p.Optional("age").Int("Age in years").Min(0).Max(5)
+		p.Attribute("gender").Enum("").
+			Add("male", "A male speciemen").
+			Add("female", "A female speciemen")
 	})
 
 	strings = goschema.NewObjectType("Example String Schema", func(p goschema.ObjectType) {
-		p.String("foo", "")
-		p.String("bar", "").Optional()
+		p.Attribute("foo").String("")
+		p.Optional("bar").String("")
 	})
 
 	integers = goschema.NewObjectType("Example integer schema", func(p goschema.ObjectType) {
-		p.Int("foo", "")
-		p.Int("min", "").Min(5).Optional()
-		p.Int("max", "").Max(6).Optional()
-		p.Int("minmax1", "").Min(3).Max(6).Optional()
-		p.Int("minmax2", "").Min(3).Max(6).Optional()
+		p.Attribute("foo").Int("")
+		p.Optional("min").Int("").Min(5)
+		p.Optional("max").Int("").Max(6)
+		p.Optional("minmax1").Int("").Min(3).Max(6)
+		p.Optional("minmax2").Int("").Min(3).Max(6)
 	})
 
 	enums = goschema.NewObjectType("Example enum schema", func(p goschema.ObjectType) {
-		p.Enum("foo", "").Add("A", "").Add("B", "")
-		p.Enum("bar", "").Add("X", "").Add("Y", "").Optional()
+		p.Attribute("foo").Enum("").Add("A", "").Add("B", "")
+		p.Optional("bar").Enum("").Add("X", "").Add("Y", "")
 	})
 
 	maps = goschema.NewObjectType("Example map schema", func(p goschema.ObjectType) {
-		p.Map("map1", "mdesc", func(g goschema.MapType) {
+		p.Attribute("map1").Map(func(g goschema.MapType) {
 			g.String("foooo")
 		})
 	})
 
 	nested = goschema.NewObjectType("Nested object example", func(p goschema.ObjectType) {
-		p.Object("nested", "Nested object", func(p goschema.ObjectType) {
-			p.String("foo", "Foo")
-			p.String("bar", "Bar")
+		p.Attribute("nested").Object("Nested object", func(p goschema.ObjectType) {
+			p.Attribute("foo").String("Foo")
+			p.Attribute("bar").String("Bar")
 		})
 	})
 
@@ -64,7 +66,7 @@ var (
 	})
 
 	any = goschema.NewObjectType("Some example", func(p goschema.ObjectType) {
-		p.Any("any", "this can be just anything")
+		p.Attribute("any").Any("this can be just anything")
 	})
 
 	nullSchema = goschema.NewSomeOf("null or string", func(p goschema.SomeOf) {

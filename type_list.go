@@ -63,3 +63,33 @@ func (g *listType) Object(desc string, ops func(ObjectType)) ObjectType {
 	g.subtype = t
 	return t
 }
+
+func (g *listType) Null(desc string) NullType {
+	t := NewNullType(desc)
+	g.subtype = t
+	return t
+}
+
+func (g *listType) Any(desc string) AnyType {
+	t := NewAnyType(desc)
+	g.subtype = t
+	return t
+}
+
+func (g *listType) SomeOf(desc string, ops func(SomeOf)) SomeOf {
+	t := NewSomeOf(desc, ops)
+	g.subtype = t
+	return t
+}
+
+func (g *listType) List(ops func(ListType)) ListType {
+	t := NewListType(ops)
+	g.subtype = t
+	return t
+}
+
+func (g *listType) Map(ops func(MapType)) MapType {
+	t := NewMapType("", ops)
+	g.subtype = t
+	return t
+}

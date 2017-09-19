@@ -7,7 +7,13 @@ import (
 
 type objectType struct {
 	baseType
-	props map[string]Type
+	props    map[string]Type
+	optional map[string]bool
+}
+
+type objectAttribute struct {
+	object *objectType
+	name   string
 }
 
 func NewObjectType(description string, each func(ObjectType)) ObjectType {
@@ -15,7 +21,8 @@ func NewObjectType(description string, each func(ObjectType)) ObjectType {
 		baseType: baseType{
 			description: description,
 		},
-		props: map[string]Type{},
+		props:    map[string]Type{},
+		optional: map[string]bool{},
 	}
 	each(gop)
 	return gop
@@ -38,7 +45,7 @@ func (g *objectType) addProperties(data map[string]interface{}) {
 
 	for name, value := range g.props {
 		props[name] = value.asJSONSchema()
-		if value.isRequired() {
+		if !g.optional[name] {
 			required = append(required, name)
 		}
 	}
@@ -73,55 +80,77 @@ func (g *objectType) docString(prefix string, name string, docPrefix string) str
 	return result
 }
 
-func (g *objectType) Optional() ObjectType {
-	g.optional = true
-	return g
+func (g *objectType) Attribute(name string) ObjectAttribute {
+	return &objectAttribute{
+		object: g,
+		name:   name,
+	}
 }
 
-func (g *objectType) Enum(name string, desc string) EnumType {
+func (g *objectType) Optional(name string) ObjectAttribute {
+	g.optional[name] = true
+	return &objectAttribute{
+		object: g,
+		name:   name,
+	}
+}
+
+func (g *objectAttribute) Enum(desc string) EnumType {
 	t := NewEnumType(desc)
-	g.props[name] = t
+	g.object.props[g.name] = t
 	return t
 }
 
-func (g *objectType) Int(name string, desc string) IntType {
-	prop := NewIntType(desc)
-	g.props[name] = prop
-	return prop
+func (g *objectAttribute) Int(desc string) IntType {
+	t := NewIntType(desc)
+	g.object.props[g.name] = t
+	return t
 }
 
-func (g *objectType) Bool(name string, desc string) BoolType {
-	prop := NewBoolType(desc)
-	g.props[name] = prop
-	return prop
+func (g *objectAttribute) Bool(desc string) BoolType {
+	t := NewBoolType(desc)
+	g.object.props[g.name] = t
+	return t
 }
 
-func (g *objectType) String(name string, desc string) StringType {
-	prop := NewStringType(desc)
-	g.props[name] = prop
-	return prop
+func (g *objectAttribute) String(desc string) StringType {
+	t := NewStringType(desc)
+	g.object.props[g.name] = t
+	return t
 }
 
-func (g *objectType) Object(name string, desc string, ops func(ObjectType)) ObjectType {
-	prop := NewObjectType(desc, ops)
-	g.props[name] = prop
-	return prop
+func (g *objectAttribute) Object(desc string, ops func(ObjectType)) ObjectType {
+	t := NewObjectType(desc, ops)
+	g.object.props[g.name] = t
+	return t
 }
 
-func (g *objectType) Map(name string, desc string, ops func(MapType)) MapType {
-	prop := NewMapType(desc, ops)
-	g.props[name] = prop
-	return prop
+func (g *objectAttribute) Map(ops func(MapType)) MapType {
+	t := NewMapType("", ops)
+	g.object.props[g.name] = t
+	return t
 }
 
-func (g *objectType) List(name string, ops func(ListType)) ListType {
-	prop := NewListType(ops)
-	g.props[name] = prop
-	return prop
+func (g *objectAttribute) List(ops func(ListType)) ListType {
+	t := NewListType(ops)
+	g.object.props[g.name] = t
+	return t
 }
 
-func (g *objectType) Any(name string, description string) AnyType {
-	prop := NewAnyType(description)
-	g.props[name] = prop
-	return prop
+func (g *objectAttribute) Any(description string) AnyType {
+	t := NewAnyType(description)
+	g.object.props[g.name] = t
+	return t
+}
+
+func (g *objectAttribute) Null(description string) NullType {
+	t := NewNullType(description)
+	g.object.props[g.name] = t
+	return t
+}
+
+func (g *objectAttribute) SomeOf(desc string, ops func(SomeOf)) SomeOf {
+	t := NewSomeOf(desc, ops)
+	g.object.props[g.name] = t
+	return t
 }

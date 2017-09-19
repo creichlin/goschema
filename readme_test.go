@@ -9,21 +9,21 @@ import (
 
 func TestReadmeExample(t *testing.T) {
 	person = goschema.NewObjectType("Example Schema", func(p goschema.ObjectType) {
-		p.String("firstName", "")
-		p.String("lastName", "").Optional()
-		p.Bool("is-old", "The person is considered old").Optional()
-		p.Int("age", "Age in years").Min(0).Max(5).Optional()
-		p.Enum("gender", "").Add("male", "A male speciemen").Add("female", "A female speciemen")
-		p.List("hobbies", func(p goschema.ListType) {
+		p.Attribute("firstName").String("")
+		p.Optional("lastName").String("")
+		p.Optional("is-old").Bool("The person is considered old")
+		p.Optional("age").Int("Age in years").Min(0).Max(5)
+		p.Attribute("gender").Enum("").Add("male", "A male speciemen").Add("female", "A female speciemen")
+		p.Attribute("hobbies").List(func(p goschema.ListType) {
 			p.String("all my hobbies")
 		})
-		p.List("siblings", func(p goschema.ListType) {
+		p.Attribute("siblings").List(func(p goschema.ListType) {
 			p.Object("all my siblings", func(p goschema.ObjectType) {
-				p.String("firstName", "")
-				p.String("lastName", "").Optional()
+				p.Attribute("firstName").String("")
+				p.Optional("lastName").String("")
 			})
 		})
-		p.Map("results", "a map of ints or bools", func(g goschema.MapType) {
+		p.Attribute("results").Map(func(g goschema.MapType) {
 			g.SomeOf("bla", func(g goschema.SomeOf) {
 				g.String("prosa")
 				g.Bool("technical")

@@ -54,3 +54,9 @@ func (g *someOf) String(desc string) StringType {
 	g.subtypes = append(g.subtypes, t)
 	return t
 }
+
+func (g *someOf) Null(desc string) NullType {
+	t := NewNullType(desc)
+	g.subtypes = append(g.subtypes, t)
+	return t
+}

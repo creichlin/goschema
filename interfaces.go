@@ -67,8 +67,13 @@ type SomeOf interface {
 	Type
 	String(desc string) StringType
 	Bool(desc string) BoolType
+	Null(desc string) NullType
 }
 
 type AnyType interface {
+	Type
+}
+
+type NullType interface {
 	Type
 }

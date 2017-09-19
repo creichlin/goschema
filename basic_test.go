@@ -13,7 +13,7 @@ import (
 type testCase struct {
 	Name     string
 	Schema   goschema.Type
-	Document map[string]interface{}
+	Document interface{}
 	Errors   []string
 }
 
@@ -65,6 +65,11 @@ var (
 
 	any = goschema.NewObjectType("Some example", func(p goschema.ObjectType) {
 		p.Any("any", "this can be just anything")
+	})
+
+	nullSchema = goschema.NewSomeOf("null or string", func(p goschema.SomeOf) {
+		p.String("either a tring")
+		p.Null("or just null")
 	})
 
 	testCases = []testCase{
@@ -214,6 +219,22 @@ var (
 			any,
 			map[string]interface{}{},
 			[]string{"any: any is required"},
+		}, {
+			"null doc",
+			nullSchema,
+			nil,
+			[]string{},
+		}, {
+			"string doc",
+			nullSchema,
+			"hey",
+			[]string{},
+		}, {
+			"int doc",
+			nullSchema,
+			6,
+			[]string{"(root): Invalid type. Expected: string, given: integer",
+				"(root): Must validate at least one schema (anyOf)"},
 		},
 	}
 )

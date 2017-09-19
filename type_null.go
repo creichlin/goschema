@@ -12,8 +12,8 @@ func NewNullType(description string) NullType {
 	}
 }
 
-func (g *nullType) docString(prefix, name string, docPrefix string) string {
-	return docString(prefix, name, docPrefix, g.description, "can be nothing (null)")
+func (g *nullType) docString(field string, docPrefix string) string {
+	return docString(field, g.description, docPrefix, "must be nothing (null)")
 }
 
 func (g *nullType) asJSONSchema() map[string]interface{} {

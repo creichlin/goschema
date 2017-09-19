@@ -12,8 +12,8 @@ func NewAnyType(description string) AnyType {
 	}
 }
 
-func (g *anyType) docString(prefix, name string, docPrefix string) string {
-	return docString(prefix, name, docPrefix, g.description, "can be anything")
+func (g *anyType) docString(field string, docPrefix string) string {
+	return docString(field, field, g.description, "can be anything")
 }
 
 func (g *anyType) asJSONSchema() map[string]interface{} {

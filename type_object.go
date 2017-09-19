@@ -54,10 +54,9 @@ func (g *objectType) addProperties(data map[string]interface{}) {
 	}
 }
 
-func (g *objectType) docString(prefix string, name string, docPrefix string) string {
+func (g *objectType) docString(field string, docPrefix string) string {
 	result := ""
-	result += docString(prefix, name, docPrefix, g.description)
-	prefix += "  "
+	result += docString(field, g.description, docPrefix, "object")
 
 	keys := []string{}
 	for key := range g.props {
@@ -69,9 +68,9 @@ func (g *objectType) docString(prefix string, name string, docPrefix string) str
 	for _, key := range keys {
 		opt := ""
 		if g.optional[key] {
-			opt = "optional,"
+			opt = "optional"
 		}
-		result += g.props[key].docString(prefix, key, opt)
+		result += g.props[key].docString(field+"."+key, opt)
 	}
 	return result
 }

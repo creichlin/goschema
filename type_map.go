@@ -1,9 +1,5 @@
 package goschema
 
-import (
-	"strings"
-)
-
 type mapType struct {
 	baseType
 	subtype Type
@@ -33,13 +29,8 @@ func (g *mapType) asJSONSchema() map[string]interface{} {
 	return data
 }
 
-func (g *mapType) docString(prefix string, name string, docPrefix string) string {
-	if name != "" { // we are not on root level
-		return docString(prefix, name, docPrefix, g.description) + g.subtype.docString(prefix+"  ", "  ", "")
-	}
-	result := g.description + "\n"
-	result += strings.Repeat("-", len(g.description)) + "\n"
-	return result
+func (g *mapType) docString(field string, docPrefix string) string {
+	return g.subtype.docString(field+".*", "map of")
 }
 
 func (g *mapType) Enum(desc string) EnumType {

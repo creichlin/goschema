@@ -41,7 +41,7 @@ func ValidateGO(t Type, document interface{}) *gutil.ErrorCollector {
 // Doc returns a string containing a very coarse documentation built from the
 // validator definition
 func Doc(t Type) string {
-	docstr := t.docString("", "", "")
+	docstr := t.docString("", "")
 	return format.Align(docstr, "//")
 }
 
@@ -59,12 +59,51 @@ func AsGOJSONSchema(t Type) interface{} {
 	return t.asJSONSchema()
 }
 
-func docString(prefix, name string, doc ...string) string {
+func docString(field string, doc string, docs ...string) string {
 	parts := []string{}
-	for _, d := range doc {
+	for _, d := range docs {
 		if d != "" {
 			parts = append(parts, d)
 		}
 	}
-	return prefix + name + " // " + strings.Join(parts, " ") + "\n"
+
+	name := extractName(field)
+	nameDoc := mergeNameDoc(name, doc)
+
+	return cleanUpField(field) + " // " + nameDoc + strings.Join(parts, " ") + "\n"
+}
+
+func mergeNameDoc(name, doc string) string {
+	if name == "" && doc == "" {
+		return ""
+	}
+	if name == "" {
+		return doc + ", "
+	}
+	if doc == "" {
+		return name + ", "
+	}
+	return name + " " + doc + ", "
+}
+
+func cleanUpField(field string) string {
+	if field == "" {
+		return "."
+	}
+	if len(field) > 1 && field[0] == '.' {
+		return field[1:]
+	}
+	return field
+}
+
+func extractName(field string) string {
+	ln := strings.Split(field, ".")
+	name := ln[len(ln)-1]
+
+	if strings.HasSuffix(name, "]") || // if field is a list
+		strings.HasSuffix(name, ")") || // or a someOf
+		name == "*" { // or a map, there is no name
+		return ""
+	}
+	return name
 }

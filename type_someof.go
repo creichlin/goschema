@@ -1,5 +1,7 @@
 package goschema
 
+import "strconv"
+
 type someOf struct {
 	baseType
 	subtypes []Type
@@ -28,10 +30,10 @@ func (g *someOf) asJSONSchema() map[string]interface{} {
 	return data
 }
 
-func (g *someOf) docString(prefix string, name string, docPrefix string) string {
-	dstr := docString(prefix, name, "is one of")
-	for _, st := range g.subtypes {
-		dstr += st.docString(prefix+"  ", "- ", "")
+func (g *someOf) docString(field string, docPrefix string) string {
+	dstr := docString(field, "", docPrefix, "any of")
+	for i, st := range g.subtypes {
+		dstr += st.docString(field+" ("+strconv.Itoa(i)+")", "")
 	}
 	return dstr
 }

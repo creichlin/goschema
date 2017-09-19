@@ -3,7 +3,7 @@ package goschema
 // Type is an interface that is implemented by all nodes of a validation tree
 type Type interface {
 	asJSONSchema() map[string]interface{}
-	docString(prefix, name string, descPrefix string) string
+	docString(field string, descPrefix string) string
 }
 
 // TypeDefs provides methods to define a validator for a child of

@@ -18,11 +18,11 @@ func NewEnumType(description string) EnumType {
 	}
 }
 
-func (g *enumType) docString(prefix, name string, docPrefix string) string {
-	doc := docString(prefix, name, docPrefix, g.description, "as string, it's one of:")
+func (g *enumType) docString(field string, docPrefix string) string {
+	doc := docString(field, g.description, docPrefix, "must be one of:")
 
 	for _, item := range g.items {
-		doc += prefix + " // - " + item.key + ": " + item.description + "\n"
+		doc += " //   - \"" + item.key + "\" " + item.description + "\n"
 	}
 	return doc
 }

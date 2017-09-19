@@ -26,7 +26,7 @@ func (g *intType) Max(max int) IntType {
 	return g
 }
 
-func (g *intType) docString(prefix, name string, docPrefix string) string {
+func (g *intType) docString(field string, docPrefix string) string {
 	rnge := ""
 	if g.min != nil && g.max != nil {
 		rnge += fmt.Sprintf("from %v to %v", *g.min, *g.max)
@@ -35,7 +35,7 @@ func (g *intType) docString(prefix, name string, docPrefix string) string {
 	} else if g.max != nil {
 		rnge += fmt.Sprintf("%v or less", *g.max)
 	}
-	return docString(prefix, name, docPrefix, g.description, "as int", rnge)
+	return docString(field, g.description, docPrefix, "int", rnge)
 }
 
 func (g *intType) asJSONSchema() map[string]interface{} {

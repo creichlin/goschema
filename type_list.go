@@ -25,8 +25,8 @@ func (g *listType) asJSONSchema() map[string]interface{} {
 	return data
 }
 
-func (g *listType) docString(prefix string, name string, docPrefix string) string {
-	return g.subtype.docString(prefix, name+"[]", "List of")
+func (g *listType) docString(field string, docPrefix string) string {
+	return g.subtype.docString(field+"[]", "list of")
 }
 
 func (g *listType) Enum(desc string) EnumType {
